@@ -120,17 +120,27 @@ export class UserService {
   }
 
   findAll() {
-    return `This action returns all user`;
+ const findAll = this.userModel.find();
   }
 
   findOne(id: number) {
     return `This action returns a #${id} user`;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const newUpdate = await this.userModel.findOne({ where: { id } })
+    if (!newUpdate) {
+      throw new NotFoundException('user not found')
+    }
 
+    const updateUser = await this.userModel.updateOne({ id }, updateUserDto)
+    const updatedUser = await this.userModel.findOne({ where: { id } })
+    return {
+      statusCode: 200,
+      message: 'user updated successfully',
+      data: updatedUser
+    }
+  }
   remove(id: number) {
     return `This action removes a #${id} user`;
   }
