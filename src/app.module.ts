@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UploadModule } from './upload/upload.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [UploadModule,
@@ -15,7 +16,7 @@ import { UploadModule } from './upload/upload.module';
    uri: configService.get<string>('DB_URI'),
    
       })
-      }),
+      }), UserModule,
   ],
 })
 export class AppModule {}
