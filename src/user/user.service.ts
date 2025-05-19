@@ -123,8 +123,15 @@ export class UserService {
  const findAll = this.userModel.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string) {
+    const user = await this.userModel.find()
+
+    const findUserById = await this.userModel.findOne({ id });
+    if (!findUserById) {
+      throw new HttpException('User not found', 404);
+    }
+
+    return findUserById;
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
