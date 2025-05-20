@@ -1,17 +1,23 @@
-import { Schema, Document } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import mongoose, { Document } from 'mongoose';
 
-export interface UploadDocument extends Document {
-  filename: string;
+
+@Schema()
+export class Upload extends Document {
+  @Prop({rewired: true})
+  filename: string
+
+  @Prop({required: true}) 
   url: string;
+
+  @Prop({required: true})
   format: string;
+
+  @Prop({required: true})
   size: number;
+
+  @Prop({ type: Date, default: Date.now })
   uploadedAt: Date;
 }
 
-export const UploadSchema = new Schema<UploadDocument>({
-  filename: { type: String, required: true },
-  url: { type: String, required: true },
-  format: { type: String, required: true },
-  size: { type: Number, required: true },
-  uploadedAt: { type: Date, default: Date.now },
-});
+export const uploadSchema = SchemaFactory.createForClass(Upload);

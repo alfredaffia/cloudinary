@@ -3,11 +3,11 @@ import { UploadApiResponse, v2 as cloudinary } from 'cloudinary';
 import { Readable } from 'stream';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { UploadDocument } from './schemas/file.schema';
+import { Upload} from './schemas/file.schema';
 
 @Injectable()
 export class UploadService {
-  constructor(@InjectModel('Upload') private readonly uploadModel: Model<UploadDocument>) {}
+  constructor(@InjectModel('Upload') private readonly uploadModel: Model<Upload>) {}
 
   async uploadFile(file: Express.Multer.File): Promise<UploadApiResponse> {
     if (!file) {
