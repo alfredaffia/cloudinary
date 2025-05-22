@@ -197,12 +197,18 @@ export class UserService {
             }
        
 
-            await uploadedFile.save(); // Save to MongoDB
-            resolve({
-                          message: 'File uploaded successfully',
+          await uploadedFile.save(); 
+            user.profilePictureUrl = result.secure_url;
+            await user.save();
+          
+          
+          resolve({
+            message: 'File uploaded successfully',
             profilePictureUrl: result.secure_url,
-            uploadDetails: uploadedFile}
-            ); // Return the Cloudinary response
+            uploadDetails: uploadedFile,
+            userName: user.userName,
+          });
+          console.log(uploadedFile.url);
 
           } catch (dbError) {
             console.error('Database Save Error:', dbError);
