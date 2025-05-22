@@ -7,11 +7,16 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import * as dotenv from 'dotenv'
 import { JwtStrategy } from '../Auth/jwt.strategy';
+import { CloudinaryModule } from 'src/cloudinary/coudinary.module';
+import { uploadSchema } from './schemas/file.schema';
+
 dotenv.config()
 
 @Module({
+    
   imports: [
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }],),
+    CloudinaryModule,
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema },{ name: 'Upload', schema: uploadSchema }],),
 
       JwtModule.register({
     global:true,
@@ -22,7 +27,8 @@ dotenv.config()
   PassportModule.register({
     defaultStrategy:'jwt',
     session:true
-  })
+  }),
+  
   ],
   controllers: [UserController],
 providers: [UserService,JwtStrategy

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UploadedFile, Res,Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UploadedFile, Res,Request, BadRequestException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -25,6 +25,20 @@ export class UserController {
   @Get()
   findAll() {
     return this.userService.findAll();
+  }
+
+  @Post('upload/:id')
+  @UseInterceptors(FileInterceptor('file')) // Ensure this matches the form-data key
+  async uploadFile(@UploadedFile() file: Express.Multer.File, @Param('id') id: string) {
+    if (!file) {
+      throw new BadRequestException('No file received. Please upload a valid file.');
+    }
+
+    try {
+      return await this.userService.uploadFile(file,id);
+    } catch (error) {
+      throw new BadRequestException(`File upload failed: ${error.message}`);
+    }
   }
 
   @Get(':id')
